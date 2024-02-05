@@ -1,0 +1,131 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  phoneNumber String       @unique
+  isAdmin     Boolean      @default(false)
+  activateKey Int          @unique
+  name        String?
+  role        EnumUserRole @default(USER)
+  basket      Basket[]
+  orders      Order[]
+  electronic  Electronic[]
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  createdAt String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  payment_id     String            @unique
+  paymentMethod  EnumMeymontMethod
+  status         EnumOrderStatus   @default(PENDING)
+  paidStatus     EnumPaymentStatus @default(PENDING)
+  paid           Int
+  orderPrice     Int
+  invitationInfo InvitationInfo[]
+  userName       String
+  userPhone      String
+  User           User?             @relation(fields: [userId], references: [id])
+  userId         Int?
+}
+
+model Card {
+  id               Int      @id @default(autoincrement())
+  createdAt        String
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  name             String
+  description      String
+  type             String
+  barcode          String
+  orders           Int      @default(0)
+  quantity         Int
+  wasQuantity      Int
+  castPrice        Int
+  minOrderQuantity Int
+  price            Int
+  imageLink        String[]
+  Basket           Basket[]
+}
+
+model Basket {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  card   Card @relation(fields: [cardId], references: [id])
+  cardId Int
+
+  @@id([cardId, userId])
+}
+
+model InvitationInfo {
+  id         Int                 @id @default(autoincrement())
+  cardId     Int
+  cardPrice  Int
+  cardImage  String[]
+  luckyOnes  String
+  family     String
+  lang       EnumInvintationLang
+  restaurant String
+  time       String
+  date       String
+  quantity   Int
+  comment    String
+  Order      Order?              @relation(fields: [orderId], references: [id])
+  orderId    Int?
+}
+
+model Electronic {
+  id        Int      @id @default(autoincrement())
+  createdAt String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name      String
+  viewing   Int    @default(0)
+  path      String
+  price     Int
+  shelfLife String
+  User      User?  @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+enum EnumOrderStatus {
+  PENDING
+  IN_PROGRESS
+  CAN_BE_PICKED_UP
+  TOOK
+}
+
+enum EnumInvintationLang {
+  RU
+  UZ
+  EN
+}
+
+enum EnumMeymontMethod {
+  UZCARD
+  HUMO
+  CASH
+}
+
+enum EnumPaymentStatus {
+  PENDING
+  PAID
+}
+
+enum EnumUserRole {
+  USER
+  DIRECTOR
+  MANAGER
+  SALESMAN
+}
