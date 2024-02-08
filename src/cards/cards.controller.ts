@@ -38,6 +38,11 @@ export class CardsController {
     return this.cardsService.getCards();
   }
 
+  @Get('best-products')
+  bestProducts() {
+    return this.cardsService.bestProducts();
+  }
+
   @Get('get-cards-by-tag/:tag')
   getCardsByTag(@Param('tag') tag: string) {
     return this.cardsService.getCardsByTag(tag);

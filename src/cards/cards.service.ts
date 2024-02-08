@@ -64,6 +64,13 @@ export class CardsService {
   async getCards() {
     return await this.prisma.card.findMany({ select: cardSelect });
   }
+  async bestProducts() {
+    return await this.prisma.card.findMany({
+      select: cardSelect,
+      orderBy: { orders: 'desc' },
+      take: 8,
+    });
+  }
   async getCardsAdmin() {
     return await this.prisma.card.findMany();
   }
