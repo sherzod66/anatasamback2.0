@@ -93,6 +93,6 @@ export class AuthService {
     };
   }
   getMessageForSms(secretKey: number): string {
-    return `Anatasam воспользуйтесь кодом верефикации, указанным ниже, для входа: ${secretKey} Anatasama uses the code check below to login: ${secretKey}`;
+    return `anatasam.uz: Воспользуйтесь кодом верефикации, указанным ниже, для входа: ${secretKey}. Tizimga kirish uchun quyidagi tasdiqlash kodidan foydalaning ${secretKey}`;
   }
 }
