@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { PrismaService } from 'src/peisma sevice/prisma.service';
+import { PrismaService } from 'src/prisma sevice/prisma.service';
 import {
   orderClickCompleteDto,
   orderClickPrepareDto,
@@ -215,6 +215,7 @@ export class OrdersService {
   async changeOrderStatus(requestUserId: number, body: changeOrderStatusDto) {
     const thisOrder = await this.prisma.order.findUnique({
       where: { id: body.id },
+      include: { invitationInfo: true },
     });
     if (!thisOrder) throw new BadRequestException('Order not found');
     if (thisOrder.status === 'TOOK')
@@ -232,12 +233,12 @@ export class OrdersService {
       try {
         await this.smsService.sendSms(
           thisOrder.userPhone,
-          this.getMessageForSms(thisOrder.id),
+          this.getMessageForSms(thisOrder.invitationInfo[0].luckyOnes),
         );
       } catch (e) {
         return await this.smsService.errorHandler(
           thisOrder.userPhone,
-          this.getMessageForSms(thisOrder.id),
+          this.getMessageForSms(thisOrder.invitationInfo[0].luckyOnes),
         );
       }
       return { status: 1, message: 'Order status changed successfully' };
@@ -293,8 +294,11 @@ export class OrdersService {
     return { status: -1, message: 'The order cannot be deleted' };
   }
 
-  getMessageForSms(orderId: number): string {
-    return `Ваш заказ готов и ожидает вас. Номер заказа: ${orderId}. Your order is ready and waiting for you. Order number: ${orderId}`;
+  getMessageForSms(orderId: string): string {
+    return `anatasam.uz: Заказанные вами пригласительные ${orderId} готовы и ожидают вас.
+    Siz buyurtma qilgan taklifnomalar ${orderId}  tayyor va sizni kutmoqda
+    Samarqand shahri, Amir Temur ko‘chasi, 36-uy
+    Instagram: https://clck.ru/39fnv3`;
   }
 }
 /*

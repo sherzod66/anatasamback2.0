@@ -35,4 +35,6 @@ export class CardUpdateDto {
   type: string;
   @IsNumber()
   minOrderQuantity: number;
+  @IsString()
+  barcode: string;
 }

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CardDto, CardUpdateDto } from './dto/card.dto';
-import { PrismaService } from 'src/peisma sevice/prisma.service';
+import { PrismaService } from 'src/prisma sevice/prisma.service';
 import { rm } from 'fs-extra';
 import { path } from 'app-root-path';
 import { cardSelect } from './dto/cardSelect';
@@ -37,6 +37,7 @@ export class CardsService {
       quantity,
       type,
       minOrderQuantity,
+      barcode,
     }: CardUpdateDto,
     { id }: { id: string },
   ) {
@@ -54,6 +55,7 @@ export class CardsService {
         price,
         type,
         minOrderQuantity,
+        barcode,
       },
       select: cardSelect,
     });

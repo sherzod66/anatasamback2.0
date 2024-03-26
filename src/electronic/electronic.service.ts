@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateElectronicDto } from './dto/create-electronic.dto';
-import { PrismaService } from 'src/peisma sevice/prisma.service';
+import { PrismaService } from 'src/prisma sevice/prisma.service';
 import { rm } from 'fs-extra';
 import { path } from 'app-root-path';
 

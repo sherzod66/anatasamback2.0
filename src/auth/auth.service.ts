@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { authDto } from './dto/auth.dto';
-import { PrismaService } from 'src/peisma sevice/prisma.service';
+import { PrismaService } from 'src/prisma sevice/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { SmsService } from 'src/sms service/sms.service';
 
